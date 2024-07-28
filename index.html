@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Skener Životopisů</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="logo">AI Skener Životopisů</div>
+    </header>
+
+    <main>
+        <section id="vstup">
+            <div class="sloupec">
+                <h2>Váš Životopis</h2>
+                <input type="file" id="zivotopis-soubor" accept=".pdf,.doc,.docx">
+                <div id="nazev-souboru"></div>
+                <textarea id="zivotopis" placeholder="Nebo sem vložte text životopisu"></textarea>
+            </div>
+            <div class="sloupec">
+                <h2>Popis Práce</h2>
+                <input type="text" id="nazev-pozice" placeholder="Název pozice">
+                <input type="text" id="obor" placeholder="Obor">
+                <textarea id="popis-prace" placeholder="Sem vložte popis práce"></textarea>
+            </div>
+        </section>
+
+        <section id="akce">
+            <button id="skenovat-zivotopis">Skenovat Životopis</button>
+        </section>
+
+        <section id="odpocet" class="skryto">
+            <div class="kruh-odpocet">
+                <svg width="200" height="200">
+                    <circle r="90" cx="100" cy="100" fill="transparent" stroke="#3498db" stroke-width="10" stroke-dasharray="565.48" stroke-dashoffset="0"></circle>
+                    <circle id="odpocet-kruh" r="90" cx="100" cy="100" fill="transparent" stroke="#2ecc71" stroke-width="10" stroke-dasharray="565.48" stroke-dashoffset="565.48"></circle>
+                </svg>
+                <div id="odpocet-text">60</div>
+            </div>
+        </section>
+
+        <section id="vysledky" class="skryto">
+            <h2>Výsledky Analýzy</h2>
+            <div id="chatgpt-odpoved"></div>
+            <button id="novy-sken">Skenovat nový životopis</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 AI Skener Životopisů. Všechna práva vyhrazena.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
