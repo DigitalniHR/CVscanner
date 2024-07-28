@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('zivotopis-soubor');
-    const fileNameDisplay = document.getElementById('nazev-souboru');
+    const resumeTextarea = document.getElementById('zivotopis');
+    const jobTitleInput = document.getElementById('nazev-pozice');
+    const jobDescriptionTextarea = document.getElementById('popis-prace');
     const scanButton = document.getElementById('skenovat-zivotopis');
     const countdownSection = document.getElementById('odpocet');
     const countdownText = document.getElementById('odpocet-text');
@@ -9,35 +11,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const chatgptResponse = document.getElementById('chatgpt-odpoved');
     const newScanButton = document.getElementById('novy-sken');
 
-    fileInput.addEventListener('change', updateFileName);
+    const resumeError = document.getElementById('zivotopis-error');
+    const jobError = document.getElementById('prace-error');
+
     scanButton.addEventListener('click', startScan);
     newScanButton.addEventListener('click', resetScan);
 
-    function updateFileName() {
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.textContent = `Vybraný soubor: ${fileInput.files[0].name}`;
-        } else {
-            fileNameDisplay.textContent = '';
-        }
-    }
-
     function startScan() {
-        const resume = document.getElementById('zivotopis').value;
-        const jobTitle = document.getElementById('nazev-pozice').value;
-        const industry = document.getElementById('obor').value;
-        const jobDescription = document.getElementById('popis-prace').value;
-
-        if (!resume && !fileInput.files.length) {
-            alert('Prosím nahrajte soubor životopisu nebo vložte text životopisu.');
+        const resumeFile = fileInput.files[0];
+        const resumeText = resumeTextarea.value.trim();
+        const jobTitle = jobTitleInput.value.trim();
+        const jobDescription = jobDescriptionTextarea.value.trim();
+        
+        resumeError.style.display = 'none';
+        jobError.style.display = 'none';
+        
+        if (!resumeFile && !resumeText) {
+            resumeError.style.display = 'block';
             return;
         }
-        if (!jobDescription) {
-            alert('Prosím vyplňte popis práce.');
+        
+        if (!jobTitle || !jobDescription) {
+            jobError.style.display = 'block';
             return;
         }
 
-        document.getElementById('vstup').classList.add('skryto');
-        document.getElementById('akce').classList.add('skryto');
+        document.querySelector('.input-section').classList.add('skryto');
+        scanButton.classList.add('skryto');
         countdownSection.classList.remove('skryto');
 
         startCountdown();
@@ -63,10 +63,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function callWebhook() {
-        const resume = document.getElementById('zivotopis').value;
-        const jobTitle = document.getElementById('nazev-pozice').value;
-        const industry = document.getElementById('obor').value;
-        const jobDescription = document.getElementById('popis-prace').value;
+        const resumeText = resumeTextarea.value.trim();
+        const jobTitle = jobTitleInput.value.trim();
+        const jobDescription = jobDescriptionTextarea.value.trim();
 
         const webhookUrl = 'https://hook.eu1.make.com/dnnp3fa33rodu212ydpkhmrrvm9yntph';
 
@@ -77,9 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    resume: resume,
+                    resume: resumeText,
                     jobTitle: jobTitle,
-                    industry: industry,
                     jobDescription: jobDescription
                 })
             });
@@ -103,15 +101,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function resetScan() {
-        document.getElementById('zivotopis').value = '';
-        document.getElementById('nazev-pozice').value = '';
-        document.getElementById('obor').value = '';
-        document.getElementById('popis-prace').value = '';
         fileInput.value = '';
-        fileNameDisplay.textContent = '';
+        resumeTextarea.value = '';
+        jobTitleInput.value = '';
+        jobDescriptionTextarea.value = '';
 
         resultsSection.classList.add('skryto');
-        document.getElementById('vstup').classList.remove('skryto');
-        document.getElementById('akce').classList.remove('skryto');
+        document.querySelector('.input-section').classList.remove('skryto');
+        scanButton.classList.remove('skryto');
     }
 });
